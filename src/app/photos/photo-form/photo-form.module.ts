@@ -1,12 +1,22 @@
+import { RouterModule } from "@angular/router";
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { HttpClientModule } from "@angular/common/http";
+import { ReactiveFormsModule, FormsModule } from "@angular/forms";
 
 import { PhotoFormComponent } from "./photo-form.component";
+import { VMessageModule } from "src/app/shared/components/vmessage/vmessage.module";
 
 @NgModule({
   declarations: [PhotoFormComponent],
-  imports: [CommonModule, HttpClientModule],
+  imports: [
+    CommonModule,
+    HttpClientModule,
+    ReactiveFormsModule,
+    VMessageModule,
+    FormsModule,
+    RouterModule,
+  ],
   exports: [PhotoFormComponent],
 })
 export class PhotoFormModule {}
