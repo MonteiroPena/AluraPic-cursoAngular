@@ -4,6 +4,7 @@
   <!-- Email -->
   <div class="form-group">
     <input
+      #emailInput
       formControlName="email"
       placeholder="email"
       class="form-control"
@@ -92,7 +93,7 @@
       text="Maximun length is 14"
     ></ap-vmessage>
   </div>
-<!-- botao registro -->
+  <!-- botao registro -->
   <button
     [disabled]="signupForm.invalid || signupForm.pending"
     class="btn btn-primary btn-block"
