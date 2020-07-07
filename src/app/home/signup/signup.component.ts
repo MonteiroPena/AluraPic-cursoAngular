@@ -7,6 +7,7 @@ import { UserNotTakenValidatorService } from "./user-not-taken.validator.service
 import { lowerCaseValidator } from "src/app/shared/validators/lower-case.validator";
 import { SignUpService } from "./signup.service";
 import { NewUser } from "./new-user";
+import { userNamePasswordValidator } from "./username-password.validator";
 
 @Component({
   templateUrl: "./signup.component.html",
@@ -25,35 +26,40 @@ export class SignUpComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.signupForm = this.formBuilder.group({
-      email: ["", [Validators.required, Validators.email]],
-      fullName: [
-        "",
-        [
-          Validators.required,
-          Validators.minLength(2),
-          Validators.maxLength(40),
+    this.signupForm = this.formBuilder.group(
+      {
+        email: ["", [Validators.required, Validators.email]],
+        fullName: [
+          "",
+          [
+            Validators.required,
+            Validators.minLength(2),
+            Validators.maxLength(40),
+          ],
         ],
-      ],
-      userName: [
-        "",
-        [
-          Validators.required,
-          lowerCaseValidator,
-          Validators.minLength(2),
-          Validators.maxLength(30),
+        userName: [
+          "",
+          [
+            Validators.required,
+            lowerCaseValidator,
+            Validators.minLength(2),
+            Validators.maxLength(30),
+          ],
+          this.userNotTakenValidatorService.checkUserNameTaken(),
         ],
-        this.userNotTakenValidatorService.checkUserNameTaken(),
-      ],
-      password: [
-        "",
-        [
-          Validators.required,
-          Validators.minLength(8),
-          Validators.maxLength(14),
+        password: [
+          "",
+          [
+            Validators.required,
+            Validators.minLength(8),
+            Validators.maxLength(14),
+          ],
         ],
-      ],
-    });
+      },
+      {
+        validator: userNamePasswordValidator,
+      }
+    );
 
     // tslint:disable-next-line: no-unused-expression
     this.platformDetectorService.isPlatformBrowser() &&
@@ -61,10 +67,12 @@ export class SignUpComponent implements OnInit {
   }
 
   signup() {
-    const newUser = this.signupForm.getRawValue() as NewUser;
-    this.signUpService.signup(newUser).subscribe(
-      () => this.router.navigate([""]),
-      (err) => console.log(err)
-    );
+    if (this.signupForm.valid && !this.signupForm.pending) {
+      const newUser = this.signupForm.getRawValue() as NewUser;
+      this.signUpService.signup(newUser).subscribe(
+        () => this.router.navigate([""]),
+        (err) => console.log(err)
+      );
+    }
   }
 }
